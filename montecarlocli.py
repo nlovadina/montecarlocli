@@ -1,0 +1,54 @@
+import click
+import numpy as np
+import pandas as pd
+import random
+from scipy import stats
+from colorama import Fore, Back, Style
+
+confidence_safe = 0.85
+confidence_aggressive = 0.50
+confidence_hostile = 0.20
+
+
+def when_will_it_be_done():
+    print("Not yet implemented")
+
+def how_many_items(trials, iterations, pd_data):
+    iterations_output = []
+    t = pd_data['throughput'].to_numpy()
+    for trial in range(trials):
+        iteration = np.random.choice(t, iterations)
+        iterations_output.append(iteration)
+    expected_output = np.array(np.sum(iterations_output, axis=1))
+    forecasted_items_number_safe = np.percentile(expected_output, (1-confidence_safe)*100, method='closest_observation')
+    forecasted_items_number_aggressive = np.percentile(expected_output, (1-confidence_aggressive)*100, method='closest_observation')
+    forecasted_items_number_hostile = np.percentile(expected_output, (1-confidence_hostile)*100, method='closest_observation')
+    left_align_main = 46
+    alignment_numbers = 19
+    box_borders = left_align_main+alignment_numbers+3
+    center_align =9
+    right_align = 15
+    print(f"*-{'':-^{box_borders}}*")
+    print("* "+Back.GREEN+f'Number of pbi forecasted with {confidence_safe*100}% confidence:_{forecasted_items_number_safe:_>{alignment_numbers}.0f}'+Back.RESET+" *")
+    print("* "+Back.YELLOW+f'Number of pbi forecasted with {confidence_aggressive*100}% confidence:_{forecasted_items_number_aggressive:_>{alignment_numbers}.0f}'+Back.RESET+" *")
+    print("* "+Back.RED+f'Number of pbi forecasted with {confidence_hostile*100}% confidence:_{forecasted_items_number_hostile:_>{alignment_numbers}.0f}'+Back.RESET+" *")
+    print(f"*-{'':-^{box_borders}}*")
+
+@click.command()
+@click.option('--trials', default=10000, help='Number of trials for the montecarlo simulation (Default: 10000).')
+@click.option('--backlog_size', default=50, help='Size of the backlog to forecast (Default: 50).')
+@click.option('--throughput_file', prompt='The CSV file containing the throughput', help='The CSV file containing the throughput.', default="example.csv", type=str)
+@click.option('--iterations', default=3 ,prompt='please insert how many iterations you can afford', help='The number of iterations for which you are forecasting.', type=int)
+@click.option('--forecast_type', prompt='please insert how many iterations you can afford', help='The number of iterations for which you are forecastin', type=str, default='2')
+def cli(trials, backlog_size, throughput_file, iterations, forecast_type):
+    """This software will help you to forecast when a backlog of a certain size will be 
+    done or how many PBI you can do in a certain amount of iterations"""
+    click.echo(f"Reading {throughput_file}.")
+    pd_data = pd.read_csv(throughput_file, header=0)
+    if (forecast_type == '1'):
+        click.echo(f"forecast type {forecast_type} selected")
+    elif (forecast_type == '2'):
+        click.echo(f"How many items fill be done in the next {iterations} iteration(s)")
+        how_many_items(trials, iterations, pd_data)
+    else:
+        click.echo("out of range")
