@@ -1,4 +1,4 @@
-#Monte Carlo Simulation CLI Tool
+# Monte Carlo Simulation CLI Tool
 
 Welcome to the Monte Carlo Simulation CLI Tool repository! This project is a collection of code I’ve written over the years to simplify project forecasting using monte carlo simulations. Initially inspired by a presentation from Dimitar Bakardzhiev and fueled by the work of Daniel Vacanti and Prateek Singh, I’ve moved away from Excel-based simulations to Python for greater flexibility and scalability.
 ## 🚀 Features
