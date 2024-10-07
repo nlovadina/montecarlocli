@@ -30,4 +30,4 @@ Finally install it with pip:
 And finally 
 `$ montecarlocli --help`
 
-Have fun
+Have fun.
