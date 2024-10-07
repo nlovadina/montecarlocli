@@ -1,11 +1,11 @@
 #Monte Carlo Simulation CLI Tool
 
-Welcome to the Monte Carlo Simulation CLI Tool repository! This project is a collection of code I’ve written over the years to simplify project forecasting using Monte Carlo simulations. Initially inspired by a presentation from Dimitar Bakardzhiev, I’ve moved away from Excel-based simulations to Python for greater flexibility and scalability following the suggestion from .
+Welcome to the Monte Carlo Simulation CLI Tool repository! This project is a collection of code I’ve written over the years to simplify project forecasting using monte carlo simulations. Initially inspired by a presentation from Dimitar Bakardzhiev and fueled by the work of Daniel Vacanti and Prateek Singh, I’ve moved away from Excel-based simulations to Python for greater flexibility and scalability.
 ## 🚀 Features
 
     Flexible Simulations: Run Monte Carlo simulations to forecast project timelines.
     Command-line Interface (CLI): Easily interact with the tool via the command line.
-    Customizable Parameters: Modify key parameters to fit the specific needs of your project 
+    Customizable Parameters: Modify key parameters to fit the specific needs of your project.
     Real-world Tested: This tool has been applied in real-life project management scenarios.
 
 
@@ -31,9 +31,9 @@ Navigate to the project directory:
 
 Activate the environment
 
-`$ ./bin/activate`
+`$ . ./bin/activate`
 
-Finally install it with pip:
+Finally install it with pip, all the dependencies will be automatically downloaded:
 
 `$ pip install --editable .`
 
