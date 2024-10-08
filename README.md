@@ -42,16 +42,21 @@ And last step:
 
 Have fun.
 
-## Warnings 
+## ⚠️ Warnings 
 
 The code needs desperatly some adjustement, cleanup and improvement because I literally took various script and put them togheter in a file.
 Before using the simulation I reccomand watching the following video on youtube:
 
 https://www.youtube.com/watch?v=A_0ngk6OlRg
+
 https://www.youtube.com/watch?v=ykvwBmVMXBw
+
 https://www.youtube.com/watch?v=Cdqp8029qn4
+
 https://www.youtube.com/watch?v=beQ6qGsVLJE
+
 https://www.youtube.com/watch?v=RTPcQrLE_kk
+
 https://www.youtube.com/watch?v=6At_Kwjvh1Q
 
 Because there is no silver bullet.
