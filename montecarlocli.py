@@ -10,8 +10,30 @@ confidence_aggressive = 0.50
 confidence_hostile = 0.20
 
 
-def when_will_it_be_done(trials, iterations, pd_data):
-    print("Not yet implemented")
+def when_will_it_be_done(trials, iterations, pd_data, original_backlog_size):
+    iterations_output = []
+    t = pd_data['throughput'].to_numpy()    
+    for trial in range(trials):
+        iterations = 0
+        backlog_size = original_backlog_size
+        while (backlog_size>=0):
+            backlog_size = backlog_size - t[random.randint(0, t.size-1)]
+            iterations = iterations+1
+        iterations_output.append(iterations)
+        print(iterations_output)
+    forecasted_iterations_number_safe = np.percentile(iterations_output, (confidence_safe)*100, method='closest_observation')
+    forecasted_iterations_number_aggressive = np.percentile(iterations_output, (confidence_aggressive)*100, method='closest_observation')
+    forecasted_iterations_number_hostile = np.percentile(iterations_output, (confidence_hostile)*100, method='closest_observation')
+    left_align_main = 46
+    alignment_numbers = 19
+    box_borders = left_align_main+alignment_numbers+3
+    center_align =9
+    right_align = 15
+    print(f"*-{'':-^{box_borders}}*")
+    print("* "+Fore.GREEN+f'Number of iterations forecasted with {confidence_safe*100}% confidence:_{forecasted_iterations_number_safe:_>{alignment_numbers}.0f}'+Fore.RESET+" *")
+    print("* "+f'Number of iterations forecasted with {confidence_aggressive*100}% confidence:_{forecasted_iterations_number_aggressive:_>{alignment_numbers}.0f}'+" *")
+    print("* "+Fore.RED+f'Number of iterations forecasted with {confidence_hostile*100}% confidence:_{forecasted_iterations_number_hostile:_>{alignment_numbers}.0f}'+Fore.RESET+" *")
+    print(f"*-{'':-^{box_borders}}*")
 
 def how_many_items(trials, iterations, pd_data):
     iterations_output = []
@@ -46,7 +68,8 @@ def cli(trials, backlog_size, throughput_file, iterations, forecast_type):
     click.echo(f"Reading {throughput_file}.")
     pd_data = pd.read_csv(throughput_file, header=0)
     if (forecast_type == '1'):
-        click.echo(f"forecast type {forecast_type} selected")
+        click.echo(f"When will it be done?")
+        when_will_it_be_done(trials, iterations, pd_data, backlog_size)
     elif (forecast_type == '2'):
         click.echo(f"How many items will be done in the next {iterations} iteration(s)?")
         how_many_items(trials, iterations, pd_data)
