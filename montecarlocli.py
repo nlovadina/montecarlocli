@@ -5,12 +5,12 @@ import random
 from scipy import stats
 from colorama import Fore, Back, Style
 
-confidence_safe = 0.85
+confidence_safe = 0.95
 confidence_aggressive = 0.50
 confidence_hostile = 0.20
 
 
-def when_will_it_be_done():
+def when_will_it_be_done(trials, iterations, pd_data):
     print("Not yet implemented")
 
 def how_many_items(trials, iterations, pd_data):
@@ -48,7 +48,7 @@ def cli(trials, backlog_size, throughput_file, iterations, forecast_type):
     if (forecast_type == '1'):
         click.echo(f"forecast type {forecast_type} selected")
     elif (forecast_type == '2'):
-        click.echo(f"How many items fill be done in the next {iterations} iteration(s)")
+        click.echo(f"How many items will be done in the next {iterations} iteration(s)?")
         how_many_items(trials, iterations, pd_data)
     else:
         click.echo("out of range")
