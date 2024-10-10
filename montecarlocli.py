@@ -9,15 +9,36 @@ confidence_safe = 0.95
 confidence_aggressive = 0.50
 confidence_hostile = 0.20
 
+class Config(object):
+        def __init__(self):
+             self.data = ""             
+             self.trials = 0
+        
+pass_config = click.make_pass_decorator(Config, ensure = True)
 
-def when_will_it_be_done(trials, iterations, pd_data, original_backlog_size):
+@click.group()
+@click.option('-t', '--trials', default=10000, help='Number of trials for the montecarlo simulation (Default: 10000).')
+@click.option('-f', '--file', help='The CSV file containing the the input data (look at the github page).', default="./example.csv", type=str)
+@pass_config
+def cli(config, trials, file):
+    """This software will help you to forecast when a backlog of a certain size will be 
+    done or how many PBI you can do in a certain amount of iterations"""
+    click.echo(f"Reading {file}.")
+    config.data = pd.read_csv(file, header=0)
+    config.trials = trials
+    
+
+@cli.command(help='Command to forecast when a certain amount of pbi can be done.')
+@click.option('--backlog_size', default=50, help='Size of the backlog to forecast (Default: 50).')
+@pass_config
+def when(config, backlog_size):
     iterations_output = []
-    t = pd_data['throughput'].to_numpy()    
-    for trial in range(trials):
+    t = config.data['throughput'].to_numpy()    
+    for trial in range(config.trials):
         iterations = 0
-        backlog_size = original_backlog_size
-        while (backlog_size>=0):
-            backlog_size = backlog_size - t[random.randint(0, t.size-1)]
+        b_size = backlog_size
+        while (b_size>=0):
+            b_size = b_size - t[random.randint(0, t.size-1)]
             iterations = iterations+1
         iterations_output.append(iterations)
         print(iterations_output)
@@ -35,10 +56,13 @@ def when_will_it_be_done(trials, iterations, pd_data, original_backlog_size):
     print("* "+Fore.RED+f'Number of iterations forecasted with {confidence_hostile*100}% confidence:_{forecasted_iterations_number_hostile:_>{alignment_numbers}.0f}'+Fore.RESET+" *")
     print(f"*-{'':-^{box_borders}}*")
 
-def how_many_items(trials, iterations, pd_data):
+@cli.command(help='Command to forecast how many pbi can be don ein a certain amount of time.')
+@click.option('-i', '--iterations', default=3, help='The number of iterations for which you are forecasting.', type=int)
+@pass_config
+def howmany(config, iterations):
     iterations_output = []
-    t = pd_data['throughput'].to_numpy()
-    for trial in range(trials):
+    t = config.data['throughput'].to_numpy()
+    for trial in range(config.trials):
         iteration = np.random.choice(t, iterations)
         iterations_output.append(iteration)
     expected_output = np.array(np.sum(iterations_output, axis=1))
@@ -55,23 +79,3 @@ def how_many_items(trials, iterations, pd_data):
     print("* "+Back.YELLOW+f'Number of pbi forecasted with {confidence_aggressive*100}% confidence:_{forecasted_items_number_aggressive:_>{alignment_numbers}.0f}'+Back.RESET+" *")
     print("* "+Back.RED+f'Number of pbi forecasted with {confidence_hostile*100}% confidence:_{forecasted_items_number_hostile:_>{alignment_numbers}.0f}'+Back.RESET+" *")
     print(f"*-{'':-^{box_borders}}*")
-
-@click.command()
-@click.option('--trials', default=10000, help='Number of trials for the montecarlo simulation (Default: 10000).')
-@click.option('--backlog_size', default=50, help='Size of the backlog to forecast (Default: 50).')
-@click.option('--throughput_file', prompt='The CSV file containing the throughput', help='The CSV file containing the throughput.', default="example.csv", type=str)
-@click.option('--iterations', default=3 ,prompt='please insert how many iterations you can afford', help='The number of iterations for which you are forecasting.', type=int)
-@click.option('--forecast_type', prompt='please insert how many iterations you can afford', help='The number of iterations for which you are forecastin', type=str, default='2')
-def cli(trials, backlog_size, throughput_file, iterations, forecast_type):
-    """This software will help you to forecast when a backlog of a certain size will be 
-    done or how many PBI you can do in a certain amount of iterations"""
-    click.echo(f"Reading {throughput_file}.")
-    pd_data = pd.read_csv(throughput_file, header=0)
-    if (forecast_type == '1'):
-        click.echo(f"When will it be done?")
-        when_will_it_be_done(trials, iterations, pd_data, backlog_size)
-    elif (forecast_type == '2'):
-        click.echo(f"How many items will be done in the next {iterations} iteration(s)?")
-        how_many_items(trials, iterations, pd_data)
-    else:
-        click.echo("out of range")
