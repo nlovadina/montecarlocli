@@ -67,28 +67,21 @@ def when(config, backlog_size,):
 def howmany(config, iterations):
     iterations_output = []
     t = config.data['values'].to_numpy()
+    percentiles = config.percentiles
     for trial in range(config.trials):
         iteration = np.random.choice(t, iterations)
         iterations_output.append(iteration)
     expected_output = np.array(np.sum(iterations_output, axis=1))
-    forecasted_items_number_safe = np.percentile(expected_output, (1-confidence_safe)*100, method='closest_observation')
-    forecasted_items_number_aggressive = np.percentile(expected_output, (1-confidence_aggressive)*100, method='closest_observation')
-    forecasted_items_number_hostile = np.percentile(expected_output, (1-confidence_hostile)*100, method='closest_observation')
     min = np.min(expected_output)
     max = np.max(expected_output)
     avg = np.average(expected_output)
     std = np.std(expected_output)
-    left_align_main = 46
-    alignment_numbers = 19
-    box_borders = left_align_main+alignment_numbers+3
- 
-    print(f"*-{'':-^{box_borders}}*")
-    print("* "f"Forecast for _{iterations:_>{alignment_numbers}.0f} iterations "+ Back.RESET+ " *")
-    print("* "+Fore.GREEN+f'Number of pbi forecasted with {confidence_safe*100}% confidence:_{forecasted_items_number_safe:_>{alignment_numbers}.0f}'+Fore.RESET+" *")
-    print("* "+f'Number of pbi forecasted with {confidence_aggressive*100}% confidence:_{forecasted_items_number_aggressive:_>{alignment_numbers}.0f} *')
-    print("* "+Fore.RED+f'Number of pbi forecasted with {confidence_hostile*100}% confidence:_{forecasted_items_number_hostile:_>{alignment_numbers}.0f}'+Fore.RESET+" *")
-    print(f"* Min pbi {min:_>{alignment_numbers}.0f} *")
-    print(f"* Max pbi {max:_>{alignment_numbers}.0f} *")
-    print(f"* Avg pbi {avg:_>{alignment_numbers}.0f} *")
-    print(f"* Standard deviations  {std:_>{alignment_numbers}.0f} *")
-    print(f"*-{'':-^{box_borders}}*")
+    print(f"* Forecast for {backlog_size} pbi on {config.trials} trials *")
+    for p in percentiles:
+        print(
+            f"""* Number of pbi forecasted with {p*100}% confidence: {np.percentile(expected_output, (1-p)*100, method="closest_observation")}"""
+        )
+    print(f"* Min pbi {min:.0f} *")
+    print(f"* Max pbi {max:.0f} *")
+    print(f"* Avg pbi {avg:.0f} *")
+    print(f"* Standard deviations  {std:.0f} *")
