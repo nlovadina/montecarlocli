@@ -3,8 +3,6 @@ import numpy as np
 import pandas as pd
 import random
 import sys
-from scipy import stats
-from colorama import Fore, Back, Style
 
 confidence_safe = 0.95
 confidence_aggressive = 0.50
@@ -76,7 +74,7 @@ def howmany(config, iterations):
     max = np.max(expected_output)
     avg = np.average(expected_output)
     std = np.std(expected_output)
-    print(f"* Forecast for {backlog_size} pbi on {config.trials} trials *")
+    print(f"* Forecast for {iterations} with {config.trials} trials *")
     for p in percentiles:
         print(
             f"""* Number of pbi forecasted with {p*100}% confidence: {np.percentile(expected_output, (1-p)*100, method="closest_observation")}"""
