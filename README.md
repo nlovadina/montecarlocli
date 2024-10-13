@@ -69,6 +69,7 @@ https://www.youtube.com/watch?v=6At_Kwjvh1Q
 Because there is no silver bullet.
 
 ## Version history
+
 1. V 0.1 **07/10/2024 First release of the code**
 2. V 0.2 **12/10/2024 Better command line.** The two simulation has been logically separated and some more options have been added read the internal help
 3. v 0.3 **13/10/2024 Multiple percentiles.** Added option to have multiple percentiles and removed dependency on colorama.
