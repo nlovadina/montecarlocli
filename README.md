@@ -1,5 +1,12 @@
 # Monte Carlo Simulation CLI Tool
 
+- [Monte Carlo Simulation CLI Tool](#monte-carlo-simulation-cli-tool)
+  - [🚀 Features](#-features)
+  - [🛠️ Getting Started](#️-getting-started)
+  - [Installation](#installation)
+  - [⚠️ Warnings](#️-warnings)
+  - [Version history](#version-history)
+
 Welcome to the Monte Carlo Simulation CLI Tool repository! This project is a collection of code I’ve written over the years to simplify project forecasting using monte carlo simulations. Initially inspired by a presentation from Dimitar Bakardzhiev and fueled by the work of Daniel Vacanti and Prateek Singh, I’ve moved away from Excel-based simulations to Python for greater flexibility and scalability.
 ## 🚀 Features
 
@@ -60,3 +67,8 @@ https://www.youtube.com/watch?v=RTPcQrLE_kk
 https://www.youtube.com/watch?v=6At_Kwjvh1Q
 
 Because there is no silver bullet.
+
+## Version history
+1. V 0.1 **First release of the code**
+2. V 0.2 **Better command line.** The two simulation has been logically separated and some more options have been added read the internal help
+3. v 0.3 **Multiple percentiles.** Added option to have multiple percentiles and removed dependency on colorama.
