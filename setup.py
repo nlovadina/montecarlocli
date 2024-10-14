@@ -2,12 +2,12 @@ from setuptools import setup
 
 setup(
     name='montecarlocli',
-    version='0.3',
+    version='0.4',
     py_modules=['montecarlocli'],
     install_requires=[
         'Click',
         'numpy',
-        'colorama',
+        'rich',
         'pandas',
         'scipy',
     ],

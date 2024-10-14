@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import random
 import sys
+import rich.progress
+from rich.progress import track
 
 confidence_safe = 0.95
 confidence_aggressive = 0.50
@@ -28,7 +30,8 @@ def cli(config, trials, file, percentiles):
          print("Percentiles should be between 0 excluded and 1 included")
          sys.exit(1)
     click.echo(f"Reading {file}.")
-    config.data = pd.read_csv(file, header=0)
+    with rich.progress.open(file, "rb") as rich_file:
+        config.data = pd.read_csv(rich_file, header=0)
     config.trials = trials
     config.percentiles = -np.sort(-np_percentiles)
 
@@ -39,7 +42,7 @@ def when(config, backlog_size,):
     iterations_output = []
     t = config.data['values'].to_numpy()    
     percentiles = config.percentiles
-    for trial in range(config.trials):
+    for trial in track(range(config.trials), description='Processing...'):
         iterations = 0
         b_size = backlog_size
         while (b_size>=0):
@@ -66,7 +69,7 @@ def howmany(config, iterations):
     iterations_output = []
     t = config.data['values'].to_numpy()
     percentiles = config.percentiles
-    for trial in range(config.trials):
+    for trial in track(range(config.trials), description='Processing...'):
         iteration = np.random.choice(t, iterations)
         iterations_output.append(iteration)
     expected_output = np.array(np.sum(iterations_output, axis=1))
