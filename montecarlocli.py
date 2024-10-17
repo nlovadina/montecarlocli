@@ -6,10 +6,6 @@ import sys
 import rich.progress
 from rich.progress import track
 
-confidence_safe = 0.95
-confidence_aggressive = 0.50
-confidence_hostile = 0.20
-
 class Config(object):
         def __init__(self):
              self.data = ""             
